@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Dinámico de Tarjeta de Crédito</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+       
+
+
+    
+
+        .container_card {
+            width: 850px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow: hidden;
+            margin-right: 500px;
+        }
+
+        .card-container {
+            position: relative;
+            height: 200px;
+            perspective: 1000px;
+        }
+
+        .card {
+            position: absolute;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            border-radius: 15px;
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+            animation: gradientBG 5s ease infinite;
+            background-size: 200% 200%;
+            opacity: 9;
+            
+        }
+
+        /* Efecto de tilt 3D mejorado */
+        .card:hover {
+            transform: rotateY(15deg) rotateX(8deg) scale(1.05);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(230, 184, 0, 0.3),
+                -15px -15px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card::before {
+            
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(255, 255, 255, 0.08) 40%, 
+                rgba(255, 255, 255, 0) 60%);
+            z-index: 1;
+            border-radius: 15px;
+            pointer-events: none;
+        }
+
+        .card::after {
+            
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            border-radius: 15px;
+            transform: rotate(25deg);
+            animation: shine 1.5s infinite linear;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Movimiento de fondo más rápido */
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+                box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+            }
+            25% {
+                box-shadow: 0 15px 35px rgba(230, 184, 0, 0.2);
+            }
+            50% {
+                background-position: 100% 50%;
+                box-shadow: 0 15px 25px rgba(92, 64, 51, 0.3);
+            }
+            75% {
+                box-shadow: 0 15px 35px rgba(13, 13, 13, 0.2);
+            }
+            100% {
+                background-position: 0% 50%;
+                box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        /* Movimiento de brillo más rápido y dinámico */
+        @keyframes shine {
+            0% {
+                transform: translateX(-200%) translateY(-200%) rotate(25deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.3;
+            }
+            40% {
+                opacity: 0.5;
+            }
+            60% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateX(200%) translateY(200%) rotate(25deg);
+                opacity: 0;
+            }
+        }
+
+        .flip {
+            transform: rotateY(180deg);
+        }
+
+        .front, .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #0d0d0d, #5C4033, #E6B800);
+            background-size: 200% 200%;
+            animation: gradientBG 5s ease infinite;
+            color: white;
+        }
+
+        .back {
+            transform: rotateY(180deg);
+        }
+
+        .card-logo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .card-logo h3 {
+            font-size: 24px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .chip {
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(135deg, #cbb27c 0%, #e7d194 50%, #cbb27c 100%);
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chip img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .chip::before, .chip::after {
+            content: '';
+            position: absolute;
+            border-radius: 2px;
+        }
+
+        .chip::before {
+            width: 30px;
+            height: 24px;
+            top: 8px;
+            left: 10px;
+        }
+
+        .chip::after {
+            width: 15px;
+            height: 24px;
+            top: 8px;
+            left: 30px;
+        }
+
+        .card-number {
+            font-size: 22px;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card-details {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-holder, .expires {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .label {
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            opacity: 0.7;
+        }
+
+        .value {
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .magnetic-strip {
+            height: 40px;
+            background-color: #000;
+            margin: 20px 0;
+        }
+
+        .signature {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0 10px;
+        }
+
+        .cvv {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .card-type {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* Form */
+        .card-form {
+            background: linear-gradient(135deg, #0d0d0d, #5C4033, #E6B800);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: white;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4c6ef5;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .input-row .form-group {
+            flex: 1;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg,#E6B800, #5C4033, #0d0d0d);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #3b5bdb;
+        }
+
+        .input-invalid {
+            border-color: #e74c3c;
+        }
+
+        
+
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+
+
+        
+
+    </style>
+
+
+
+html
+
+
+<main class="container_card">
+        <div class="card-container">
+            <div class="card" id="card">
+                <div class="front">
+                    <div class="card-logo">
+                        <h3>BANK</h3>
+                        <div class="chip">
+                            <img src="chip2.png" alt="Chip" class="dish-image">
+                        </div>
+                    </div>
+                    <div class="card-number" id="cardNumber">•••• •••• •••• ••••</div>
+                    <div class="card-details">
+                        <div class="card-holder">
+                            <div class="label">Titular</div>
+                            <div class="value" id="cardHolder">Su nombre aquí</div>
+                        </div>
+                        <div class="expires">
+                            <div class="label">Expira</div>
+                            <div class="value"><span id="expiryMonth">MM</span>/<span id="expiryYear">AA</span></div>
+                        </div>
+                    </div>
+                    <div class="card-type" id="cardType"></div>
+                </div>
+                <div class="back">
+                    <div class="magnetic-strip"></div>
+                    <div class="signature">
+                        <div class="signature-line"></div>
+                        <div class="cvv" id="cvvDisplay">•••</div>
+                    </div>
+                    <div class="card-logo">
+                        <h3>BANK</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-form">
+            <form id="creditCardForm">
+                <div class="form-group">
+                    <label for="cardNumberInput">Número de Tarjeta</label>
+                    <input type="text" id="cardNumberInput" placeholder="1234 5678 9012 3456" maxlength="19">
+                    <div class="error" id="cardNumberError">Por favor ingrese un número de tarjeta válido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cardHolderInput">Nombre del Titular</label>
+                    <input type="text" id="cardHolderInput" placeholder="Nombre completo">
+                    <div class="error" id="cardHolderError">Por favor ingrese el nombre del titular</div>
+                </div>
+
+                <div class="input-row">
+                    <div class="form-group">
+                        <label for="expiryMonthInput">Mes de Expiración</label>
+                        <input type="text" id="expiryMonthInput" placeholder="MM" maxlength="2">
+                        <div class="error" id="expiryMonthError">Mes inválido</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expiryYearInput">Año de Expiración</label>
+                        <input type="text" id="expiryYearInput" placeholder="AA" maxlength="2">
+                        <div class="error" id="expiryYearError">Año inválido</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cvvInput">CVV</label>
+                        <input type="text" id="cvvInput" placeholder="123" maxlength="3">
+                        <div class="error" id="cvvError">CVV inválido</div>
+                    </div>
+                </div>
+
+                <button type="submit">Procesar Pago</button>
+            </form>
+        </div>
+    </main>
